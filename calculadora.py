@@ -69,7 +69,7 @@ class Calculator(tk.Tk):
             is_equals = text == "="
             style_name = "Eq.TButton" if is_equals else ("Op.TButton" if is_operator else "Digit.TButton")
 
-            colspan = 2 if text == "0" else 1
+            colspan = 1
             btn = ttk.Button(
                 grid_frame, text=text, command=command, style=style_name,
                 width=6 if colspan == 1 else 13
@@ -77,6 +77,9 @@ class Calculator(tk.Tk):
             btn.grid(row=row, column=col, columnspan=colspan, padx=6, pady=6, sticky="nsew", ipady=10)
 
     def add_digit(self, digit):
+        if self.expression == "Erro":
+            self.expression = ""
+            self.history_var.set("")
         self.expression += digit
         self.update_display()
 
