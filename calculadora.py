@@ -1,3 +1,4 @@
+import ast
 import tkinter as tk
 from tkinter import ttk
 
@@ -96,14 +97,26 @@ class Calculator(tk.Tk):
             self.update_display()
 
     def negate(self):
-        if self.expression:
-            self.expression = str(-self.evaluate(self.expression))
+        if not self.expression:
+            return
+        value = self.evaluate(self.expression)
+        if value == "Erro":
+            self.expression = "Erro"
             self.update_display()
+            return
+        self.expression = str(-value)
+        self.update_display()
 
     def percent(self):
-        if self.expression:
-            self.expression = str(self.evaluate(self.expression) / 100)
+        if not self.expression:
+            return
+        value = self.evaluate(self.expression)
+        if value == "Erro":
+            self.expression = "Erro"
             self.update_display()
+            return
+        self.expression = str(value / 100)
+        self.update_display()
 
     def backspace(self):
         self.expression = self.expression[:-1]
@@ -124,8 +137,18 @@ class Calculator(tk.Tk):
 
     def evaluate(self, expression):
         try:
-            return round(eval(expression), 10)
-        except (ZeroDivisionError, SyntaxError):
+            tree = ast.parse(expression, mode="eval")
+        except SyntaxError:
+            return "Erro"
+        allowed = (ast.Expression, ast.BinOp, ast.UnaryOp, ast.Constant, ast.Add, ast.Sub, ast.Mult, ast.Div, ast.USub, ast.UAdd)
+        for node in ast.walk(tree):
+            if not isinstance(node, allowed):
+                return "Erro"
+            if isinstance(node, ast.Constant) and not isinstance(node.value, (int, float)):
+                return "Erro"
+        try:
+            return round(eval(compile(tree, "<calc>", "eval"), {"__builtins__": {}}, {}), 10)
+        except (ZeroDivisionError, TypeError, ValueError):
             return "Erro"
 
     def update_display(self):
