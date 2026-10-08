@@ -1,33 +1,45 @@
-# Calculadora
-![Python](https://img.shields.io/badge/Python-3.13-3776AB?style=flat&logo=python&logoColor=white)
-![Tkinter](https://img.shields.io/badge/Tkinter-GUI-yellow?style=flat)
+# Python Calculator — calculadora gráfica
 
-Calculadora com interface gráfica feita em Python, usando Tkinter.
+![Python](https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=white)
+![Tkinter](https://img.shields.io/badge/Tkinter-stdlib-3776AB)
 
-## Sobre
+Janela Tkinter com as quatro operações, troca de sinal, porcentagem, apagar o último caractere e limpar. A expressão fica no histórico acima do visor. Não há dependência externa e o repositório não fixa a versão do Python.
 
-Uma calculadora simples com visual próprio (fundo escuro, acentos em âmbar e azul), construída com `tkinter` e `ttk` (tema `clam`, pra garantir que as cores dos botões funcionem corretamente em qualquer sistema operacional, incluindo macOS).
+| Avaliação | O que entra | O que fica de fora |
+| --- | --- | --- |
+| `ast.parse(..., mode="eval")` e `eval` com `__builtins__` vazio | número, `+`, `-`, `*`, `/` e unário | nome, chamada, potência e qualquer outro nó; divisão por zero vira `Erro` |
 
-## Funcionalidades
-
-- Operações básicas: soma, subtração, multiplicação e divisão
-- Inverter sinal (±)
-- Porcentagem (%)
-- Apagar último caractere (⌫)
-- Limpar tudo (C)
-- Exibe o histórico da expressão acima do resultado
+O resultado numérico passa por `round(..., 10)`. O botão de vírgula acrescenta `.`. O visor troca `*` por `×` e `/` por `÷`. O tema é `clam`, para a cor do `ttk.Button` valer no macOS.
 
 ## Stack
 
-- **Python 3.13**
-- **Tkinter / ttk** (interface gráfica nativa, sem dependências externas)
+- `tkinter` e `ttk` (biblioteca padrão)
+- `ast` para barrar expressão que não seja aritmética
+
+## Estrutura
+
+```
+.
+├── calculadora.py    # janela, botões e evaluate
+└── .gitignore
+```
+
+Não existe `requirements.txt`. Fundo `#0c1024`, botões de operação `#ffb84d`, igual `#5b8def`. A janela não é redimensionável.
+
+## Como rodar
+
+```bash
+git clone https://github.com/gabrielteramae/python-calculator.git
+cd python-calculator
+python3 calculadora.py
+```
+
+Precisa de um Python com Tk (a maioria dos instaladores oficiais traz; alguns builds mínimos de Linux não) e de uma sessão gráfica. Sem display, o `Tk()` falha na hora.
+
+## Testes realizados
+
+Não há suíte de testes.
 
 ---
 
-## Como rodar localmente
-
-**Pré-requisitos:** Python 3 instalado (Tkinter já vem incluso na maioria das instalações).
-
-```bash
-python3 calculadora.py
-```
+© 2026 Gabriel Teramae Chan
